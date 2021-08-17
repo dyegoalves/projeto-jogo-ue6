@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br">
+<head>
+  <title>Conversão de Medidas de Comprimento</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+  <meta http-equiv="pragma" content="no-cache"/>
+  <meta name="description" content="Conversão de medidas de comprimento"/>
+  <meta name="keywords" content="conversão medidas comprimento"/>
+  <script type="text/javascript" src="validacoes.js"></script>
+  <style type="text/css">
+    .text {
+      width:300px;
+      border:1px solid #3E5269;
+      color:#3E5269;
+      font-weight:normal;
+      text-align:right;
+    }
+    .claro {
+      background-color:#E8E8FF;
+    }
+    .escuro {
+      color:#FFFFFF;
+      background-color:#3E5269;
+    }
+  </style>
+  <script type="text/javascript">
+  //<![CDATA[
+    var campo_atual = -1;
+    var vet_equiv_metro = new Array(
+     1e6,      // 0- Megâmetro (Mm)
+     1000,     // 1- Kilômetro (Km)
+     100,      // 2- Hectômetro (hm)
+     10,       // 3- Decâmetro (dam)
+     1,        // 4- Metro (m)
+     1e-1,     // 5- Decímetro (dm)
+     1e-2,     // 6- Centímetro (cm)
+     1e-3,     // 7- Milímetro (mm)
+     1e-6,     // 8- Micrômetro (µm)
+     1e-9,     // 9- Nanômetro (nm)
+     1e-12,    //10- Picômetro (pm)
+     1609.344, //11- Milha (mi)
+     0.9144,   //12- Jarda (jd)
+     0.3048,   //13- Pé (')
+     2.54e-2   //14- Polegada (pol, ")
+    );
+    function my_expoente(ev,pode_negativo) {
+      var input = (ev.target ? ev.target : ev.srcElement);
+      var num_campo = input.name.substr(1);
+      if(num_campo!=campo_atual &&'0123456789'.indexOf(String.fromCharCode(ev.keyCode ? ev.keyCode:ev.which))>=0)
+        set_campo(num_campo);
+      return mask_expoente(ev,pode_negativo);
+    }
+    function converte(num_campo) {
+      var valido = is_expoente(document.forms['form1']['c'+campo_atual].value);
+      var metro = document.forms['form1']['c'+campo_atual].value * vet_equiv_metro[campo_atual];
+      for(var i=0;i<vet_equiv_metro.length;i++) {
+        if(i!=campo_atual)
+          document.forms['form1']['c'+i].value = (valido ? metro / vet_equiv_metro[i] :'');
+      }
+    }
+    function set_campo(num_campo) {
+      if(num_campo==campo_atual) return;
+      campo_atual = num_campo;
+      for(var i=0;i<vet_equiv_metro.length;i++) {
+        document.forms['form1']['c'+i].value='';
+        if(i!=campo_atual) {
+          document.forms['form1']['c'+i].style.backgroundColor='#E8E8E8';
+          document.forms['form1']['c'+i].readOnly=true;
+        }
+      }
+      document.forms['form1']['c'+campo_atual].style.backgroundColor='#FFFFFF';
+      document.forms['form1']['c'+campo_atual].readOnly=false;
+      document.forms['form1']['c'+campo_atual].select();
+    }
+  //]]>
+  </script>
+</head>
+<body onload="set_campo(4)" style="margin:10px;background-color:#3E5269;font-size:12px;font-family:verdana,helvetica,arial,sans-serif">
+<form id="form1" method="post" action="">
+  <div style="padding:10px 25px;background-color:#FFFFFF;border:2px inset black">
+    <h1 style="text-align:center">Conversão de Medidas de Comprimento</h1>
+    <p>Nesta página, medidas de comprimento podem ser convertidas entre si.</p>
+    <p>Procedimento:</p>
+    <ol>
+      <li>Clique em um campo para escolher a medida.</li>
+      <li>Preencha o campo e as outras unidades aparecerão convertidas automaticamente.</li>
+      <li>Notação científica utilizada: <strong>e+n = 10<sup>n</sup></strong> ; <strong>e-n = 10<sup>-n</sup></strong></li>
+    </ol>
+    <table cellspacing="2" cellpadding="1" style="margin:5px auto" summary="Tabela com as unidades">
+      <tr align="center" class="escuro">
+        <th>Unidade</th><th>Símbolo</th><th>Valor</th><th>Equivalência</th>
+      </tr>
+      <tr class="claro">
+        <td>Megâmetro</td><td>Mm</td>
+        <td>
+          <input type="text" class="text" name="c0" onclick="set_campo(0)" onkeyup="converte(0)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>Mm = 10<sup>6</sup> m</td>
+      </tr>
+      <tr class="claro">
+        <td>Quilômetro</td><td>Km</td>
+        <td>
+          <input type="text" class="text" name="c1" onclick="set_campo(1)" onkeyup="converte(1)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>Km = 10<sup>3</sup> m</td>
+      </tr>
+      <tr class="claro">
+        <td>Hectômetro</td><td>hm</td>
+        <td>
+          <input type="text" class="text" name="c2" onclick="set_campo(2)" onkeyup="converte(2)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>hm = 10<sup>2</sup> m</td>
+      </tr>
+      <tr class="claro">
+        <td>Decâmetro</td><td>dam</td>
+        <td>
+          <input type="text" class="text" name="c3" onclick="set_campo(3)" onkeyup="converte(3)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>dam = 10<sup>1</sup> m</td>
+      </tr>
+      <tr class="claro">
+        <td>METRO (unidade)</td><td>m</td>
+        <td>
+          <input type="text" class="text" name="c4" onclick="set_campo(4)" onkeyup="converte(4)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>m = 1 m</td>
+      </tr>
+      <tr class="claro">
+        <td>Decímetro</td><td>dm</td>
+        <td>
+          <input type="text" class="text" name="c5" onclick="set_campo(5)" onkeyup="converte(5)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>dm = 10<sup>-1</sup> m</td>
+      </tr>
+      <tr class="claro">
+        <td>Centímetro</td><td>cm</td>
+        <td>
+          <input type="text" class="text" name="c6" onclick="set_campo(6)" onkeyup="converte(6)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>cm = 10<sup>-2</sup> m</td>
+      </tr>
+      <tr class="claro">
+        <td>Milímetro</td><td>mm</td>
+        <td>
+          <input type="text" class="text" name="c7" onclick="set_campo(7)" onkeyup="converte(7)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>mm = 10<sup>-3</sup> m</td>
+      </tr>
+      <tr class="claro">
+        <td>Micrômetro</td><td>µm</td>
+        <td>
+          <input type="text" class="text" name="c8" onclick="set_campo(8)" onkeyup="converte(8)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>µm = 10<sup>-6</sup> m</td>
+      </tr>
+      <tr class="claro">
+        <td>Nanômetro</td><td>nm</td>
+        <td>
+          <input type="text" class="text" name="c9" onclick="set_campo(9)" onkeyup="converte(9)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>nm = 10<sup>-9</sup> m</td>
+      </tr>
+      <tr class="claro">
+        <td>Picômetro</td><td>pm</td>
+        <td>
+          <input type="text" class="text" name="c10" onclick="set_campo(10)" onkeyup="converte(10)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>pm = 10<sup>-12</sup> m</td>
+      </tr>
+      <tr align="center" class="escuro">
+        <th>Unidade</th><th>Símbolo</th><th>Valor</th><th>Equivalência</th>
+      </tr>
+      <tr class="claro">
+        <td>Milha</td><td>mi</td>
+        <td>
+          <input type="text" class="text" name="c11" onclick="set_campo(11)" onkeyup="converte(11)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>mi = 1760 jd = 1609,344 m</td>
+      </tr>
+      <tr class="claro">
+        <td>Jarda</td><td>jd</td>
+        <td>
+          <input type="text" class="text" name="c12" onclick="set_campo(12)" onkeyup="converte(12)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>jd= 3 pés = 0,9144 m</td>
+      </tr>
+      <tr class="claro">
+        <td>Pé</td><td>pé, '</td>
+        <td>
+          <input type="text" class="text" name="c13" onclick="set_campo(13)" onkeyup="converte(13)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>pé, ' = 12 pol = 0,3048 m</td>
+      </tr>
+      <tr class="claro">
+        <td>Polegada</td><td>pol, "</td>
+        <td>
+          <input type="text" class="text" name="c14" onclick="set_campo(14)" onkeyup="converte(14)" onkeypress="return my_expoente(event,false)"/>
+        </td>
+        <td>pol, " = 2,54 x 10<sup>-2</sup> m</td>
+      </tr>
+    </table>
+  </div>
+</form>
+</body>
+</html>

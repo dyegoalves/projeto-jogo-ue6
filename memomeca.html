@@ -1,0 +1,540 @@
+<html lang="pt-br" class="no-touch">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="nofollow">
+  <title>PN-EAD</title>
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/SCOFunctions.js"></script>
+  <script src="lib/md5.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Verdana, Geneva, sans-serif;
+      text-decoration: none;
+      color: #000;
+      z-index: 0;
+    }
+
+    body {
+      font-size: 16px;
+      clear: both;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #fff;
+    }
+
+    #game {
+      height: 100%;
+      position: relative;
+      background-color: rgb(255, 227, 209);
+    }
+
+    #game button {
+      cursor: pointer;
+      padding: 0.8em;
+      font: bold 18px Arial, Helvetica, sans-serif;
+      background-color: #e94e1b;
+      color: #fff;
+      border-width: 0px;
+      -webkit-border-radius: 3px;
+      border-radius: 3px;
+    }
+
+    #game label {
+      color: #706f6f;
+      font: bold 24px Arial, Helvetica, sans-serif;
+    }
+
+    #game>div {
+      margin: 0px;
+      text-align: center;
+      font: bold 19px Arial, Helvetica, sans-serif;
+      color: black;
+      background-color: white;
+      -webkit-border-radius: 3px;
+      border-radius: 3px;
+    }
+
+    #botoes {
+      bottom: 0px;
+      position: absolute;
+      background-color: #E94E1B !important;
+      width: 100% !important;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+    }
+
+    /* tela pequena */
+    #game label {
+      font-size: 1em;
+    }
+
+    /*  #game.small img.peca { top:70px; }*/
+    #game #lbTempo {
+      top: 5px;
+      left: 15px;
+    }
+
+    #game #tfTempo {
+      top: 28px;
+      left: 15px;
+    }
+
+    #game #lbVidas {
+      margin-left: -37px;
+      margin-top: 5px;
+    }
+
+    #game #lbAcertos {
+      right: 0px;
+      margin-top: -42px;
+      margin-right: 15px;
+    }
+
+    #game #tfAcertos {
+      top: 28px;
+      right: 18px;
+      width: 73px;
+    }
+
+    #game #botoes>button {
+      width: 33.333333333333333333333333333333%;
+      display: inline-block;
+      float: left;
+      height: auto;
+      border-radius: 0;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+    }
+
+    #lbTempo,
+    #tfTempo,
+    #lbVidas,
+    #lbAcertos,
+    #tfAcertos {
+      position: absolute;
+    }
+
+    #lbVidas {
+      left: 50%;
+      width: 74px;
+      margin-left: -37px;
+    }
+
+    #tfVidas {
+      position: relative !important;
+      margin: 0 auto !important;
+      top: 40px;
+      width: 110px;
+      height: 30px;
+      padding: 8px !important;
+      /*left:41.5%;*/
+    }
+
+    #botoes>button.ok,
+    #game>img.peca.ok {
+      background-color: #94c11f;
+    }
+
+    #botoes>button.nok,
+    #game>img.peca.nok {
+      background-color: #e30613;
+    }
+
+    #game>img.peca {
+      /*position:absolute;*/
+      /*   left:0;
+   top:0;*/
+      width: 100%;
+      max-width: 25em;
+      margin: 40px auto 0px auto;
+      display: block;
+      /*background-color:#ffffff;*/
+    }
+
+    #game>img.capa {
+      position: absolute;
+      left: 0;
+      /*bottom:40px;*/
+      max-width: 100%;
+      max-height: 95%;
+      right: 0;
+      margin: auto;
+    }
+
+    #game>img.logo {
+      left: 0;
+      width: 100%;
+      max-width: 500px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #btRestart,
+    #btStart,
+    #btRanking {
+      position: absolute;
+      width: 160px;
+      margin-left: -80px;
+      left: 50%;
+    }
+
+    #btStart,
+    #btRanking {
+      bottom: 20px;
+    }
+
+    #btRestart {
+      bottom: 48px;
+    }
+
+    #lbAcertosFim,
+    #lbRankFim {
+      position: absolute;
+      left: 0;
+      width: 100% !important;
+      text-align: center;
+    }
+
+    #lbAcertosFim {
+      bottom: 150px;
+    }
+
+    #lbRankFim {
+      bottom: 220px;
+    }
+
+    #tfRankFim,
+    #tfAcertosFim {
+      position: absolute;
+      left: 50%;
+    }
+
+    #tfRankFim {
+      bottom: 190px;
+      width: 96px !important;
+      margin-left: -48px !important;
+    }
+
+    #tfAcertosFim {
+      bottom: 120px;
+      width: 96px !important;
+      margin-left: -48px !important;
+    }
+
+    .fa-heart {
+      margin-left: 40px;
+      position: relative;
+    }
+
+    .fa-heart:first-child {
+      margin-left: -40px;
+    }
+
+    .fa-heart:before,
+    .fa-heart:after {
+      content: '';
+      width: 20px;
+      height: 30px;
+      position: absolute;
+      background: red;
+      left: 20px;
+      top: 0;
+      -webkit-border-radius: 50px 50px 0 0;
+      -moz-border-radius: 50px 50px 0 0;
+      border-radius: 50px 50px 0 0;
+      -webkit-transform: rotate(-45deg);
+      -moz-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+      -o-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      -webkit-transform-origin: 0 100%;
+      -moz-transform-origin: 0 100%;
+      -ms-transform-origin: 0 100%;
+      -o-transform-origin: 0 100%;
+      transform-origin: 0 100%;
+    }
+
+    .fa-heart:after {
+      left: 0;
+      -webkit-transform: rotate(45deg);
+      -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      -o-transform: rotate(45deg);
+      transform: rotate(45deg);
+      -webkit-transform-origin: 100% 100%;
+      -moz-transform-origin: 100% 100%;
+      -ms-transform-origin: 100% 100%;
+      -o-transform-origin: 100% 100%;
+      transform-origin: 100% 100%;
+    }
+
+    .fa-times {
+      color: gray !important;
+      margin-bottom: 0px !important;
+      margin-right: -30px;
+      margin-left: 50px;
+    }
+
+    .fa-times:after {
+      content: 'x';
+    }
+  </style>
+  <script>
+    var acertos = 0, vidas = 3, dtIni, tempo = 0, interval = 0, tempoResp = 0, TEMPO_DE_JOGO = 90;
+    var vetRand = [], vetImgs = [], indexImg = 0, layoutW = null, layoutH = null;
+    var vetImgsDescr = ['Acoplamento de Pratos',
+      'Acoplamento El&aacute;stico de Fita de A&ccedil;o',
+      'Acoplamento El&aacute;stico de Garras',
+      'Acoplamento El&aacute;stico de Pinos',
+      'Acoplamento Flex&iacute;vel Oldham',
+      'Acoplamento Perflex',
+      'Anel de Feltro, Fibra ou Tecido de Amianto',
+      'Anel El&aacute;stico',
+      'Arruela Estrelada',
+      'Arruela Lisa',
+      'Arruela Press&atilde;o',
+      'Arruela Serrilhada',
+      'Mancal de deslizamento Axial',
+      'Chave Allen/Hexagonal',
+      'Chaveta',
+      'Contraporca',
+      'Correia Plana',
+      'Corrente Comum',
+      'Corrente de Blocos',
+      'Corrente de Dentes',
+      'Corrente de Rolos',
+      'Dimens&atilde;o do Parafuso',
+      'Engrenagem Cil&iacute;ndrica com Cremalheira',
+      'Engrenagem Cil&iacute;ndrica com Dentes em V',
+      'Engrenagem Cil&iacute;ndrica de Dentes Internos',
+      'Engrenagem Cil&iacute;ndrica de Dentes Helicoidais',
+      'Engrenagem com Dentes Obl&iacute;quos',
+      'Engrenagem C&ocirc;nica com Dentes em Espiral',
+      'Engrenagem C&ocirc;nica com Dentes Retos',
+      'Engrenagem de Dentes Retos',
+      'Junta de Articula&ccedil;&atilde;o',
+      'Junta de Borracha',
+      'Junta Labirinto',
+      'Junta Met&aacute;lica Estriada',
+      'Junta Universal',
+      'Parafuso Auto-atarraxante com Fenda',
+      'Parafuso Auto-atarraxante com Fenda Cruzada',
+      'Parafuso Cabe&ccedil;a Hexagonal',
+      'Parafuso Cabe&ccedil;a Quadrada',
+      'Parafuso com Cabe&ccedil;a Cil&iacute;ndrica e com Sextavado Interno',
+      'Parafuso com Porca',
+      'Parafuso para Pequenas Montagens',
+      'Parafuso Prisioneiro',
+      'Parafuso sem-fim e Engrenagem C&ocirc;ncava',
+      'Parafuso sem Porca',
+      'Pinos',
+      'Porca Borboleta',
+      'Porca Castelo',
+      'Porca Cega',
+      'Mancal de Deslizamento Radial',
+      'Retentores',
+      'Rolamento Autocompensador com Duas Carreiras de Rolos',
+      'Rolamento Autocompensador de Esferas',
+      'Rolamento Autocompensador de uma Carreira de Rolos',
+      'Rolamento Axial Autocompensador de Rolos',
+      'Rolamento Axial de Esfera',
+      'Rolamento de Agulhas',
+      'Rolamento de Contato Angular de uma Carreira de Esferas',
+      'Rolamento de Rolo Cil&iacute;ndrico',
+      'Rolamento de Rolos C&ocirc;nicos',
+      'Rolamento Fixo de uma Carreira de Esferas',
+      'Selo Mec&acirc;nico',
+      'Tensionador',
+      'Correia Dentada',
+      'Correia em Forma de Trap&eacute;zio',
+      'Trava Por Fechamento de For&ccedil;as',
+      'Trava Por Fechamento de Forma',
+      'Junta Pl&aacute;stica ou Veda Junta',
+      'Veda&ccedil;&atilde;o com Gaxeta'];
+    function gameKeyPress(e) {
+      if (e.which >= 49 && e.which <= 51) {
+        var bt = $('#bt' + (e.which - 48));
+        if (bt.length > 0) bt.trigger('click');
+        else document.removeEventListener('keypress', gameKeyPress);
+      }
+    }
+    function restart() {
+      dtIni = new Date();
+      acertos = tempo = indexImg = 0;
+      vidas = 3;
+      var x, rand, vet = [];
+      vetRand.length = 0;
+      for (x = 0; x < vetImgsDescr.length; x++)
+        vet.push(x);
+      while (vet.length > 0) {
+        rand = Math.floor((Math.random() * vet.length));
+        vetRand.push(vet.splice(rand, 1)[0]);
+      }
+      interval = setInterval(update, 1000);
+      document.getElementById('game').innerHTML = '';
+      montaTela();
+    }
+    function update() {
+      if (interval == 0) return;
+      var obj, now = new Date();
+      tempo = Math.floor((now.getTime() - dtIni.getTime()) / 1000);
+      if ((obj = document.getElementById('tfTempo')) != null)
+        obj.innerHTML = convertTotalSeconds(TEMPO_DE_JOGO - tempo).substring(3);
+      if (tempo > TEMPO_DE_JOGO || vidas <= 0) stop();
+      // else resize();
+    }
+    // function resize() {
+    //   //conteudo
+    //   var c=$('#conteudo'), w=c.width(), h=c.height();
+    //   var i, g=document.getElementById('game');
+    //   if(g==null) return;
+    //   i=g.querySelector('img.logo');
+    //   if(i!=null) // na tela reiniciar
+    //     i.style.height=h-340+'px';
+    //   if(w==layoutW && h==layoutH) return;
+    //   layoutW = w;
+    //   layoutH = h;
+    //   i=g.querySelector('img.peca');
+    //   if(i!=null) { // no jogo
+    //     g=$('#game');
+    //     if(w >= 700) {
+    //       i.style.height=(h-205)+'px';
+    //       if(!g.hasClass('big'))
+    //         g.removeClass('small').addClass('big');
+    //     } else {
+    //       i.style.height=(h-135-$('#botoes').height())+'px';
+    //       if(!g.hasClass('small'))
+    //         g.removeClass('big').addClass('small');
+    //     }
+    //   }
+    // }
+    function stop() {
+      if (interval != 0) {
+        clearInterval(interval);
+        interval = 0;
+      }
+      if (tempoResp != 0) {
+        clearTimeout(tempoResp);
+        tempoResp = 0;
+      }
+      var loading = document.getElementById('game');
+      if (loading)
+
+        loading.innerHTML = '<img src="../../lib/fancybox/fancybox_loading.gif">';
+      // $.ajax({
+      //  type:'POST',url:'ranking.php',dataType:'json',
+      //  data:{'acao':'save','pontos':acertos,'vidas':vidas},
+      //  success:function(res) {
+      document.getElementById('game').innerHTML =
+        '<img id="logo" class="logo" src="img/logo.svg">'
+        // +'<label id="lbRankFim">RANKING</label>'
+        // +'<div id="tfRankFim">0'+res['rank']+'</div>'
+        + '<label id="lbAcertosFim">ACERTOS </label>'
+        + '<div id="tfAcertosFim">' + (acertos < 10 ? '0' + acertos : acertos) + '</div>'
+        + '<button id="btRestart" onclick="restart()">Reiniciar</button>\n';
+      // +'<button id="btRanking" onclick="go(3)">Ranking</button>\n'
+      // resize();
+      //  }
+      // });
+    }
+    function responde(bt, val) {
+      if (tempoResp != 0) return;
+      if (val != vetRand[indexImg]) {
+        vidas--;
+        bt.className = 'nok';
+        $('#game > img').addClass('nok');
+      } else {
+        acertos++;
+        bt.className = 'ok';
+        $('#game > img').addClass('ok');
+      }
+      if (indexImg >= vetImgsDescr.length - 1) stop();
+      else {
+        indexImg++;
+        tempoResp = setTimeout(montaTela, 700);
+      }
+    }
+    function montaTela() {
+      var i, contVet = 0, rand, vet2 = [], vet = [vetRand[indexImg], -1, -1];
+      var close = vetImgsDescr[vet[0]].substring(0, vetImgsDescr[vet[0]].indexOf(' '));
+      for (i = 0; i < vetImgsDescr.length; i++) {
+        if (vetImgsDescr[i].substring(0, vetImgsDescr[i].indexOf(' ')) == close && i != vet[0]) {
+          vet[++contVet] = i;
+          if (contVet == 2)
+            break;
+        }
+      }
+      if (contVet < 1) {
+        do {
+          vet[1] = Math.floor((Math.random() * vetImgsDescr.length));
+        } while (vet[1] == vet[0]);
+      }
+      if (contVet < 2) {
+        do {
+          vet[2] = Math.floor((Math.random() * vetImgsDescr.length));
+        } while (vet[2] == vet[0] || vet[2] == vet[1]);
+      }
+      while (vet.length > 0) {
+        rand = Math.floor((Math.random() * vet.length));
+        vet2.push(vet.splice(rand, 1)[0]);
+      }
+      document.getElementById('game').innerHTML =
+        '<label id="lbTempo">TEMPO</label><div id="tfTempo">'
+        + convertTotalSeconds(TEMPO_DE_JOGO - tempo).substring(3) + '</div>\n'
+        + '<label id="lbVidas">VIDAS </label>\n'
+        + '<div id="tfVidas"><i class="fa fa-heart"></i> '
+        + (vidas == 3 ? '<i class="fa fa-heart"></i> <i class="fa fa-heart"></i>'
+          : (vidas == 2 ? '<i class="fa fa-heart"></i> <i class="fa fa-times"></i>'
+            : '<i class="fa fa-times"></i> <i class="fa fa-times"></i>'))
+        + '</div>\n'
+        + '<label id="lbAcertos">ACERTOS</label><div id="tfAcertos">' + (acertos < 10 ? '0' + acertos : acertos) + '</div>\n'
+        + '<img class="peca" src="' + vetImgs[vetRand[indexImg]].src + '">\n'
+        + '<div id="botoes">'
+        + '<button id="bt1" onclick="responde(this,' + vet2[0] + ')">' + vetImgsDescr[vet2[0]] + '</button>\n'
+        + '<button id="bt2" onclick="responde(this,' + vet2[1] + ')">' + vetImgsDescr[vet2[1]] + '</button>\n'
+        + '<button id="bt3" onclick="responde(this,' + vet2[2] + ')">' + vetImgsDescr[vet2[2]] + '</button>\n'
+        + '</div>';
+      tempoResp = 0;
+      layoutW = layoutH = null;
+      // resize();
+    }
+    /*function gabarito() {
+      var x, htm='';
+      for(x=0; x<vetImgsDescr.length; x++) {
+        htm+='<h3>'+x+': '+vetImgsDescr[x]+'</h3>\n'
+         +'<img src="'+vetImgs[x].src+'">\n';
+      }
+      $.fancybox({minWidth:350,content:htm});
+      $('.fancybox-skin').css({'background-color':'white'});
+    }*/
+    for (var x = 0; x < vetImgsDescr.length; x++) {
+      vetImgs.push(new Image()); // faz o preload das imagens
+      vetImgs[x].src = 'svg/' + MD5('' + x) + '.svg';
+    }
+    // setTimeout(function() {  o timeout espera o acoes fazer o bind
+    //  $('#conteudoScroll').perfectScrollbar('destroy');
+    // },500);
+    // window.addEventListener('resize',resize);
+    document.addEventListener('keypress', gameKeyPress, false);
+  </script>
+</head>
+
+<body>
+  <div id="game">
+    <img class="capa" src="img/capa.svg">
+    <button id="btStart" onclick="restart()">Iniciar</button>
+    <!--<button id="btGabarito" onclick="gabarito()" style="position:absolute;width:160px;margin-left:90px;left:50%;bottom:0px">Gabarito</button>-->
+  </div>
+</body>
+
+</html>

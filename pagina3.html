@@ -1,0 +1,47 @@
+<script src="js/vue2.js"></script>
+<script src="js/jogo.js"></script>
+
+<style>
+  td {
+    text-align: center;
+  }
+
+  #nome {
+    text-align: left;
+  }
+
+  .fa-heart {
+    color: red !important;
+    margin-bottom: 0px !important;
+  }
+
+  table.tabela>tbody>tr.eu>td {
+    font-weight: bold;
+  }
+</style>
+
+<div id="app">
+
+  <h1>Ranking</h1>
+  <table class="tabela" id="rankTbl">
+    <thead>
+      <tr>
+        <th>Posi&ccedil;&atilde;o</th>
+        <th>Nome</th>
+        <th>Acertos</th>
+        <th>vidas</th>
+        <th>Data</th>
+        <th>Hora</th>
+
+      </tr>
+    </thead>
+    <tbody id="tbtg" v-for="(jogador, index) in jogadores">
+      <td>{{ index + 1 }}</td>
+      <td>{{ jogador.name}}</td>
+      <td>{{ jogador.acertos}}</td>
+      <td>{{ jogador.vidas}}</td>
+      <td>{{ jogador.data}}</td>
+      <td>{{ jogador.hora}}</td>
+    </tbody>
+  </table>
+</div>

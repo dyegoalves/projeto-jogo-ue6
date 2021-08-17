@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+  <meta name="description" content="Conversão de medidas de comprimento"/>
+  <meta name="keywords" content="conversão medidas comprimento"/>
+  <title>Conversão de Medidas de Comprimento</title>
+  <link type="text/css" href="../css/style.css" rel="stylesheet"/>
+  <link type="text/css" href="../css/pagina.css" rel="stylesheet"/>
+  <script type="text/javascript" src="../js/acoes.js"></script>
+  <script type="text/javascript" src="validacoes.js"></script>
+  <script type="text/javascript">
+  //<![CDATA[
+    var campo_atual = -1;
+
+    function my_expoente(ev,pode_negativo) {
+      var input = (ev.target ? ev.target : ev.srcElement);
+      var num_campo = input.name.substr(1);
+      if(num_campo!=campo_atual &&'0123456789'.indexOf(String.fromCharCode(ev.keyCode ? ev.keyCode:ev.which))>=0)
+        set_campo(num_campo);
+      return mask_expoente(ev,pode_negativo);
+    }
+    function converte() {
+      var valido = is_expoente(document.forms['form1']['c'+campo_atual].value);
+      var val=document.forms['form1']['c'+campo_atual].value;
+      if(campo_atual==1){ //pressão
+        document.forms['form1']['c4'].value=val*0.01;
+        document.forms['form1']['c7'].value=val*0.15;
+      } else if(campo_atual==4){ //pressão
+        document.forms['form1']['c1'].value=val*100;
+        document.forms['form1']['c7'].value=val*14.5;
+      } else if(campo_atual==7){ //pressão
+        document.forms['form1']['c1'].value=val*0.07;
+        document.forms['form1']['c4'].value=val*6.89;
+      } else if(campo_atual==2){ //força
+        document.forms['form1']['c5'].value=val*0.01;
+        document.forms['form1']['c8'].value=val*0.22;
+      } else if(campo_atual==5){ //força
+        document.forms['form1']['c2'].value=val*9.81;
+        document.forms['form1']['c8'].value=val*2.2;
+      } else if(campo_atual==8){ //força
+        document.forms['form1']['c2'].value=val*4.45;
+        document.forms['form1']['c5'].value=val*0.45;
+      } else if(campo_atual==3){ //área
+        document.forms['form1']['c6'].value=val*1000;
+        document.forms['form1']['c9'].value=val*1550;
+      } else if(campo_atual==6){ //força
+        document.forms['form1']['c3'].value=val*0.001;
+        document.forms['form1']['c9'].value=val*0.16;
+      } else if(campo_atual==9){ //força
+        document.forms['form1']['c3'].value=val*6.45*0.001;
+        document.forms['form1']['c6'].value=val*6.45;
+      }
+      if((campo_atual==1||campo_atual==2) && document.forms['form1']['c1'].value!=''&& document.forms['form1']['c2'].value!='' ){
+        document.forms['form1']['c3'].value=document.forms['form1']['c2'].value/document.forms['form1']['c1'].value;//ok
+        document.forms['form1']['c6'].value=document.forms['form1']['c3'].value*1000;
+        document.forms['form1']['c9'].value=document.forms['form1']['c3'].value*1550;
+      }
+      else if((campo_atual==2||campo_atual==3)&& document.forms['form1']['c2'].value!=''&& document.forms['form1']['c3'].value!='' ){
+        document.forms['form1']['c1'].value=document.forms['form1']['c2'].value/document.forms['form1']['c3'].value;//ok
+        document.forms['form1']['c4'].value=document.forms['form1']['c1'].value*0.01;
+        document.forms['form1']['c7'].value=document.forms['form1']['c1'].value*0.15;
+      }
+      else if((campo_atual==1||campo_atual==3)&& document.forms['form1']['c1'].value!=''&& document.forms['form1']['c3'].value!='' ){
+        document.forms['form1']['c2'].value=document.forms['form1']['c1'].value*document.forms['form1']['c3'].value;//ok
+        document.forms['form1']['c5'].value=document.forms['form1']['c2'].value*0.01;
+        document.forms['form1']['c8'].value=document.forms['form1']['c2'].value*0.22;
+      }
+      else if((campo_atual==4||campo_atual==5) && document.forms['form1']['c4'].value!=''&& document.forms['form1']['c5'].value!='' ){
+       document.forms['form1']['c6'].value=document.forms['form1']['c5'].value/document.forms['form1']['c4'].value;
+       document.forms['form1']['c3'].value=document.forms['form1']['c6'].value*0.001;
+       document.forms['form1']['c9'].value=document.forms['form1']['c6'].value*0.16;
+      }
+      else if((campo_atual==5||campo_atual==6)&& document.forms['form1']['c5'].value!=''&& document.forms['form1']['c6'].value!='' ){ //força
+       document.forms['form1']['c4'].value=document.forms['form1']['c5'].value/document.forms['form1']['c6'].value;
+       document.forms['form1']['c1'].value=document.forms['form1']['c4'].value*100;
+       document.forms['form1']['c7'].value=document.forms['form1']['c4'].value*14.5;
+      }
+      else if((campo_atual==4||campo_atual==6)&& document.forms['form1']['c4'].value!=''&& document.forms['form1']['c6'].value!='' ){ //força
+       document.forms['form1']['c5'].value=document.forms['form1']['c4'].value*document.forms['form1']['c6'].value;//ok
+       document.forms['form1']['c2'].value=document.forms['form1']['c5'].value*9.81;
+       document.forms['form1']['c8'].value=document.forms['form1']['c5'].value*2.2;
+      }
+      else if((campo_atual==7||campo_atual==8)&& document.forms['form1']['c7'].value!=''&& document.forms['form1']['c8'].value!='' ){
+       document.forms['form1']['c9'].value=document.forms['form1']['c8'].value/document.forms['form1']['c7'].value;
+       document.forms['form1']['c3'].value=document.forms['form1']['c9'].value*6.45*0.001;
+       document.forms['form1']['c6'].value=document.forms['form1']['c9'].value*6.45;
+      }
+      else if((campo_atual==8||campo_atual==9)&& document.forms['form1']['c8'].value!=''&& document.forms['form1']['c9'].value!='' ){ //força
+       document.forms['form1']['c7'].value=document.forms['form1']['c8'].value/document.forms['form1']['c9'].value;
+       document.forms['form1']['c1'].value=document.forms['form1']['c7'].value*0.07;
+       document.forms['form1']['c4'].value=document.forms['form1']['c7'].value*6.89;
+      }
+      else if((campo_atual==7||campo_atual==9)&& document.forms['form1']['c7'].value!=''&& document.forms['form1']['c9'].value!='' ){ //força
+       document.forms['form1']['c8'].value=document.forms['form1']['c7'].value*document.forms['form1']['c9'].value;
+       document.forms['form1']['c2'].value=document.forms['form1']['c8'].value*4.45;
+       document.forms['form1']['c5'].value=document.forms['form1']['c8'].value*0.45;
+      }
+    }
+    function set_campo(num_campo) {
+      if(num_campo==campo_atual) return;
+      campo_atual = num_campo;
+      for(var i=1;i<=9;i++) {
+        //document.forms['form1']['c'+i].value='';
+        if(i!=campo_atual)
+          document.forms['form1']['c'+i].style.backgroundColor='#E8E8E8';
+      }
+      document.forms['form1']['c'+campo_atual].style.backgroundColor='#FFFFFF';
+      document.forms['form1']['c'+campo_atual].select();
+    }
+  //]]>
+  </script>
+</head>
+<body>
+<form id="form1" method="post" action="">
+  <div style="padding:10px 25px">
+    <table cellspacing="0" cellpadding="0" class="tabela" summary="">
+      <tr><th colspan="4">SIMULADOR</th></tr>
+      <tr><td>Sistema</td><td>Pressão</td><td>Força</td><td>Área</td></tr>
+      <tr>
+        <td>Internacional</td>
+        <td>
+          <input type="text" class="text" name="c1" onfocus="set_campo(1)" onkeyup="converte()" onkeypress="return my_expoente(event,false)"/>
+          Kpa
+        </td>
+        <td>
+          <input type="text" class="text" name="c2" onfocus="set_campo(2)" onkeyup="converte()" onkeypress="return my_expoente(event,false)"/>
+          Newton (N)
+        </td>
+        <td>
+          <input type="text" class="text" name="c3" onfocus="set_campo(3)" onkeyup="converte()" onkeypress="return my_expoente(event,false)"/>
+          Metro  quadrado (m<sup>2</sup>)
+        </td>
+      </tr>
+      <tr>
+        <td>Métrico</td>
+        <td>
+          <input type="text" class="text" name="c4" onfocus="set_campo(4)" onkeyup="converte()" onkeypress="return my_expoente(event,false)"/>
+          Kgf/cm2 ou bar
+        </td>
+        <td>
+          <input type="text" class="text" name="c5" onfocus="set_campo(5)" onkeyup="converte()" onkeypress="return my_expoente(event,false)"/>
+          Kgf
+        </td>
+        <td>
+          <input type="text" class="text" name="c6" onfocus="set_campo(6)" onkeyup="converte()" onkeypress="return my_expoente(event,false)"/>
+          cm<sup>2</sup>
+        </td>
+      </tr>
+      <tr>
+        <td>Inglês</td>
+        <td>
+          <input type="text" class="text" name="c7" onfocus="set_campo(7)" onkeyup="converte()" onkeypress="return my_expoente(event,false)"/>
+        Lbf/pol2 ou PSI
+        </td>
+        <td>
+          <input type="text" class="text" name="c8" onfocus="set_campo(8)" onkeyup="converte()" onkeypress="return my_expoente(event,false)"/>
+          Lbf
+        </td>
+        <td>
+          <input type="text" class="text" name="c9" onfocus="set_campo(9)" onkeyup="converte()" onkeypress="return my_expoente(event,false)"/>
+          pol<sup>2</sup>
+        </td>
+      </tr>
+    </table>
+    <input type="reset" value="Limpar"/>
+</form>
+</body>
+</html>
