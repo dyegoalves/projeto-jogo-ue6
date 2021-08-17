@@ -15,8 +15,11 @@ var app = new Vue({
     getDados: function () {
       var values = [];
       (keys = Object.keys(localStorage)), (i = keys.length);
+
       while (i--) {
-        values.push(JSON.parse(localStorage.getItem(keys[i])));
+        if (keys[i].match(/jogador_/)) {
+          values.push(JSON.parse(localStorage.getItem(keys[i])));
+        }
       }
 
       //Set dados do LOCALSTORAGE
