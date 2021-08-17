@@ -441,17 +441,12 @@
     if (!nome) {
       nome = "JOGADOR-" + Math.floor(Math.random() * 1000 * 10)
     }
-
     //Chama a funcao para salvar os dados do jogador;
     salvarDados(nome, acertos, vidas);
-
   }
-
   //Funcao responsavel por salvar os dados no localStorage
   function salvarDados(nome, acertos, vidas) {
-
     console.log("Salvar Dados .... !");
-
     //Define data que o jogo ocorreu 
     const timeElapsed = Date.now();
     const today = new Date(timeElapsed);
@@ -470,7 +465,6 @@
     dataJson = { name: nome, acertos: acertos, vidas: vidas, data: datal, hora: horalt };
     localStorage.setItem("jogador_" + Math.floor(Math.random() * 1000 * 10), JSON.stringify(dataJson));
 
-
     //Remove a class mtree-active caso exista  
     var regrali = document.querySelector("#menu > ul > li:nth-child(1)")
     regrali.classList.remove("mtree-active");
@@ -483,15 +477,10 @@
     var rankingli = document.querySelector("#menu > ul > li:nth-child(3)")
     rankingli.classList.add("mtree-active");
 
-
-
     //Chama a pagina do rangking Ranking
     javascript: go(3);
-
-
   }
   function responde(bt, val) {
-
     if (tempoResp != 0) return;
     if (val != vetRand[indexImg]) {
       vidas--;
@@ -509,7 +498,6 @@
     }
   }
   function montaTela() {
-
     var i, contVet = 0, rand, vet2 = [], vet = [vetRand[indexImg], -1, -1];
     var close = vetImgsDescr[vet[0]].substring(0, vetImgsDescr[vet[0]].indexOf(' '));
     for (i = 0; i < vetImgsDescr.length; i++) {
@@ -553,7 +541,6 @@
     layoutW = layoutH = null;
     resize();
   }
-
   /*function gabarito() {
   var x, htm='';
   for(x=0; x<vetImgsDescr.length; x++) {
@@ -575,9 +562,7 @@
 </script>
 
 <div id="game">
-
   <img class="capa" src="img/capa.svg">
-
   <!--<button id="btGabarito" onclick="gabarito()" style="position:absolute;width:160px;margin-left:90px;left:50%;bottom:0px">Gabarito</button>-->
 </div>
 
@@ -593,8 +578,6 @@
     outline: transparent;
     width: 20%;
   }
-
-
   #app button {
     margin-bottom: 80px;
     cursor: pointer;
@@ -607,13 +590,9 @@
     border-radius: 3px;
   }
 </style>
-
 <div id="app">
-
   <div class="buttonIniciar">
-
     <button v-if="showbuttonInciar" id="btStart" @click="ishowbt(false)">Iniciar</button>
-
   </div>
   <br>
   <div>
