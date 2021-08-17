@@ -470,8 +470,24 @@
     dataJson = { name: nome, acertos: acertos, vidas: vidas, data: datal, hora: horalt };
     localStorage.setItem("jogador_" + Math.floor(Math.random() * 1000 * 10), JSON.stringify(dataJson));
 
+
+    //Remove a class mtree-active caso exista  
+    var regrali = document.querySelector("#menu > ul > li:nth-child(1)")
+    regrali.classList.remove("mtree-active");
+
+    //Remove a class mtree-active caso exista 
+    var jogoli = document.querySelector("#menu > ul > li:nth-child(2)")
+    jogoli.classList.remove("mtree-active");
+
+    //Remove a class mtree-active caso exista 
+    var rankingli = document.querySelector("#menu > ul > li:nth-child(3)")
+    rankingli.classList.add("mtree-active");
+
+
+
     //Chama a pagina do rangking Ranking
     javascript: go(3);
+
 
   }
   function responde(bt, val) {
