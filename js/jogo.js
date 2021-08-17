@@ -1,7 +1,6 @@
 var app = new Vue({
   el: "#app",
   data: {
-    message: "Ola",
     showbuttonInciar: true,
     jogadores: new Object(),
   },
@@ -15,22 +14,23 @@ var app = new Vue({
     getDados: function () {
       var values = [];
       (keys = Object.keys(localStorage)), (i = keys.length);
-
       while (i--) {
+        //Atribui somente chaves iniciando com jogado_xxxx
         if (keys[i].match(/jogador_/)) {
           values.push(JSON.parse(localStorage.getItem(keys[i])));
         }
       }
 
-      //Set dados do LOCALSTORAGE
+      //Set dados do LocalStorage
       this.jogadores = values;
 
-      //Sort em acertos quanto maior o numero de acertos melhor posicao
+      //Sort em acertos quanto maior o numero de acertos melhor posição
       this.jogadores.sort(function (a, b) {
         return b.acertos - a.acertos;
       });
     },
 
+    //
     ishowbt: function (ishow) {
       this.showbuttonInciar = ishow;
       restart();
