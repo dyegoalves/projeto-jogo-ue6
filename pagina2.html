@@ -291,6 +291,10 @@
   }
 </style>
 <script>
+
+  ranking = { active: false }
+  localStorage.setItem("rankingli", JSON.stringify(ranking));
+
   var acertos = 0, vidas = 3, dtIni, tempo = 0, interval = 0, tempoResp = 0, TEMPO_DE_JOGO = 90;
   var vetRand = [], vetImgs = [], indexImg = 0, layoutW = null, layoutH = null;
   var vetImgsDescr = ['Acoplamento de Pratos',
@@ -371,7 +375,6 @@
   }
   function restart() {
 
-    console.log("restart");
     dtIni = new Date();
     acertos = tempo = indexImg = 0;
     vidas = 3;
@@ -385,9 +388,12 @@
     }
     interval = setInterval(update, 1000);
     document.getElementById('game').innerHTML = '';
+
+
     montaTela();
   }
   function update() {
+
 
     if (interval == 0) return;
     var obj, now = new Date();
@@ -463,19 +469,24 @@
 
     //Cadastra no LocalStorage
     dataJson = { name: nome, acertos: acertos, vidas: vidas, data: datal, hora: horalt };
+
     localStorage.setItem("jogador_" + Math.floor(Math.random() * 1000 * 10), JSON.stringify(dataJson));
 
-    //Remove a class mtree-active caso exista  
-    var regrali = document.querySelector("#menu > ul > li:nth-child(1)")
-    regrali.classList.remove("mtree-active");
+    ranking = { active: true }
+    localStorage.setItem("rankingli", JSON.stringify(ranking));
 
-    //Remove a class mtree-active caso exista 
-    var jogoli = document.querySelector("#menu > ul > li:nth-child(2)")
-    jogoli.classList.remove("mtree-active");
+    // if (ranking.active) {
 
-    //Remove a class mtree-active caso exista 
-    var rankingli = document.querySelector("#menu > ul > li:nth-child(3)")
-    rankingli.classList.add("mtree-active");
+    //   //Remove a class mtree-active caso exista  
+    //   var regrali = document.querySelector("#menu > ul > li:nth-child(1)")
+    //   regrali.classList.remove("mtree-active");
+    //   //Remove a class mtree-active caso exista 
+    //   var jogoli = document.querySelector("#menu > ul > li:nth-child(2)")
+    //   jogoli.classList.remove("mtree-active");
+    //   //Remove a class mtree-active caso exista 
+    //   var rankingli = document.querySelector("#menu > ul > li:nth-child(3)")
+    //   rankingli.classList.add("mtree-active");
+    // }
 
     //Chama a pagina do rangking Ranking
     javascript: go(3);
@@ -578,6 +589,7 @@
     outline: transparent;
     width: 20%;
   }
+
   #app button {
     margin-bottom: 80px;
     cursor: pointer;
